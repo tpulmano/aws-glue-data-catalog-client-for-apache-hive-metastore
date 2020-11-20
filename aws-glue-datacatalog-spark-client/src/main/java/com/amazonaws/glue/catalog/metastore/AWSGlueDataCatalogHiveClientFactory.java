@@ -6,15 +6,19 @@ import org.apache.hadoop.hive.metastore.IMetaStoreClient;
 import org.apache.hadoop.hive.metastore.api.MetaException;
 import org.apache.hadoop.hive.ql.metadata.HiveMetaStoreClientFactory;
 
+import java.util.concurrent.ConcurrentHashMap;
+
+
 public class AWSGlueDataCatalogHiveClientFactory implements HiveMetaStoreClientFactory {
 
   @Override
   public IMetaStoreClient createMetaStoreClient(
-      HiveConf conf,
-      HiveMetaHookLoader hookLoader
+          HiveConf conf,
+          HiveMetaHookLoader hookLoader,
+          boolean b,
+          ConcurrentHashMap<String, Long> concurrentHashMap
   ) throws MetaException {
     AWSCatalogMetastoreClient client = new AWSCatalogMetastoreClient(conf, hookLoader);
     return client;
   }
-
 }

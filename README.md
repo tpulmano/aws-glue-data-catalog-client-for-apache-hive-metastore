@@ -19,13 +19,13 @@ To build the Hive client, you need to first apply this [patch](https://issues.ap
 	patch -p0 <HIVE-12679.branch-2.3.patch
 	mvn clean install -DskipTests
 
-If you are using the default Maven settings, this will install a new version of patched Hive in ~/.m2/repositories/, i.e. ~/.m2/repository/org/apache/hive/hive/2.3.4-SNAPSHOT/.  The specific version of Hive will depend on the current version in pom.xml.  Presently, the latest version in the 2.3 branch (branch-2.3) is "2.3.4-SNAPSHOT".  You will need this version to build the client.
+If you are using the default Maven settings, this will install a new version of patched Hive in ~/.m2/repositories/, i.e. ~/.m2/repository/org/apache/hive/hive/2.3.7-SNAPSHOT/.  The specific version of Hive will depend on the current version in pom.xml.  Presently, the latest version in the 2.3 branch (branch-2.3) is "2.3.7-SNAPSHOT".  You will need this version to build the client.
 
 ## Building the Hive Client
 
 Once you have successfully patched and installed Hive locally, move into the AWS Glue Data Catalog Client repository and update the following property in pom.xml.
 
-	<hive2.version>2.3.4-SNAPSHOT</hive2.version>
+	<hive2.version>2.3.7-SNAPSHOT</hive2.version>
 
 You are now ready to build the Hive client.
 
@@ -34,16 +34,15 @@ You are now ready to build the Hive client.
 
 ## Building the Spark Client
 
-As Spark uses a fork of Hive based off the 1.2.1 branch, in order to build the Spark client, you need Hive 1.2 built with this [patch](https://issues.apache.org/jira/secure/attachment/12958417/HIVE-12679.branch-1.2.patch).  Unlike Hive 2.x, Hive 1.x must be built with a Maven profile set to either "hadoop-1" or "hadoop-2".
-
+As Spark uses a fork of Hive based off the 2.3.7 branch, in order to build the Spark client, you need Hive 2.3 built with this [patch](https://issues.apache.org/jira/secure/attachment/12958418/HIVE-12679.branch-2.3.patch). 
 	cd <your local Hive repo>
-	git checkout branch-1.2
-	patch -p0 <HIVE-12679.branch-1.2.patch
+	git checkout tags/rel/release-2.3.4 -b rel-2.3.4
+	patch -p0 <HIVE-12679.branch-2.3.patch
 	mvn clean install -DskipTests -Phadoop-2
 
 Go back to the AWS Glue Data Catalog Client repository and update the following property in pom.xml to match the version of Hive you just patched and installed locally.  Presently, the latest version in the 1.2 branch (branch-1.2) is "1.2.3-SNAPSHOT".
 
-	<spark-hive.version>1.2.3-SNAPSHOT</spark-hive.version>
+	<spark-hive.version>2.3.7</spark-hive.version>
 
 You are now ready to build the Spark client.
 
@@ -57,7 +56,7 @@ If you have both versions of Hive patched and installed locally, you can build b
 You need to ensure that the AWS Glue Data Catalog Client jar is in Hive's CLASSPATH and also set the "hive.metastore.client.factory.class" HiveConf variable for Hive to pick up and instantiate the AWS Glue Data Catalog Client.  For instance, on Amazon EMR, the client jar is located in /usr/lib/hive/lib/ and the HiveConf is set in /usr/lib/hive/conf/hive-site.xml.
 
 	<property>
- 		<name>hive.metastore.client.factory.class</name>
+ 		<name>hive.imetastoreclient.factory.class</name>
  		<value>com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory</value>
 	</property>
 
